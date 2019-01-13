@@ -18,7 +18,6 @@ h1 {
     float: left;
     height: 40px;
     width: 40px;
-    /* box-sizing: border-box; */
     border: 1px solid black;
     position: relative;
     background: white;
@@ -59,7 +58,6 @@ h1 {
 /* crossword title and author */
 #crossword-title {
     font-family: 'Prata', serif;
-    /* text-transform: capitalize; */
     text-align: center;
     font-size: 28px;
     padding: 8px;
@@ -110,7 +108,6 @@ h1 {
 }
 
 #modal-horoscope .modal-content {
-    /* width: 50%; */
     height: 100%;
     background-color: #001524;
     font-family: 'Zilla Slab', serif;
@@ -280,13 +277,6 @@ footer {
     top: 100px;
 }
 
-/* #weather-failure {
-    margin: 40px auto;
-} */
-
-/* .loader and @keyframes from w3schools */
-/* border and border-top colors were changed to fit astetic */
-/* https://www.w3schools.com/howto/howto_css_loader.asp */
 .loader {
     margin: 20px auto;
     border: 16px solid #757575;
@@ -327,7 +317,6 @@ footer {
     }
 
     #modal-horoscope {
-        /* background-image: url(""); */
         overflow: auto;
     }
 
@@ -339,7 +328,6 @@ footer {
 
 @media only screen and (max-width: 740px) {
     #modal-horoscope {
-        /* background-image: url(""); */
         overflow: auto;
     }
 

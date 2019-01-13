@@ -30,13 +30,9 @@ if (
 //Assign selected historic date on button click
 $("#search").on("click", function () {
     var stringDate = $("#date-input").val();
-    // console.log(stringDate);
-    // console.log(typeof stringDate);
 
     if (stringDate != "") {
         var date = moment(stringDate);
-        // console.log(date);
-
         newDate(date);
 
     } else {
@@ -70,7 +66,6 @@ function randomDate() {
     var day = Math.floor(Math.random() * (dayMax - dayMin) + dayMin);
 
     var randomDate = `${month}-${day}-${year}`;
-    // console.log(randomDate);
     newDate(randomDate);
 }
 
@@ -81,18 +76,13 @@ $("#random-date").on("click", function () {
 
 //Assign new historic date
 function newDate(date) {
-    // console.log("newDate():");
-    // console.log(date);
     var unixDate = moment(date).unix();
     var unixCurrentDate = moment().unix();
-    // console.log(`if ${unixDate} > ${unixCurrentDate}`);
     if (unixDate > unixCurrentDate) {
-        // console.log("True");
         var currentYear = "" + moment().year();
         var currentMonth = "" + (moment().month() + 1);
         var currentDay = "" + moment().date();
         date = `${currentMonth}/${currentDay}/${currentYear}`;
-        // console.log(`date: ${date}`);
     } else {
         // console.log("False");
     }
@@ -107,24 +97,17 @@ function newDate(date) {
     if (day.length < 2) {
         day = "0" + day;
     }
-    // console.log(`${month}/${day}/${year}`);
-
 
     sessionStorage.setItem("month", month);
     sessionStorage.setItem("day", day);
     sessionStorage.setItem("year", year);
 
-
-    // console.log(`m/d/y ${month}/${day}/${year}`);
-
     if (sessionStorage.getItem("page") === "index") {
         generateCrossword();
-        // newsCall();
     } else if (sessionStorage.getItem("page") === "weather") {
         weatherCall();
     } else if (sessionStorage.getItem("page") === "horoscope") {
         $("#date-current").text(moment().format("MM/DD/YYYY"))
-        // horoscopeCall();
     } else if (sessionStorage.getItem("page") === "article") {
         articleCall();
     } else {
@@ -148,7 +131,6 @@ function weatherCall() {
     var weatherYear = sessionStorage.getItem("year");
     var weatherMonth = sessionStorage.getItem("month");
     var weatherDay = sessionStorage.getItem("day");
-    // console.log(`Weather date: ${weatherMonth}/${weatherDay}/${weatherYear}`);
 
     var weatherKey = "ec5b98b7b3c4b26cd294595db6f0a868"
     var weatherURL = `https://api.darksky.net/forecast/${weatherKey}/${weatherLattitude},${weatherLongitude},${weatherYear}-${weatherMonth}-${weatherDay}T12:00:00?exclude=currently,minutely,hourly,flags`;
@@ -158,12 +140,8 @@ function weatherCall() {
         method: "GET",
         dataType: "jsonp"
     }).then(function (response) {
-        // Console log the response object for testing purposes
-        // console.log(response);
-
         var weather = response.daily.data[0];
 
-        //console.log(weather);
         $("#weather-icon").css("display", "block");
         $(".weather").css("display", "block");
         $("#weather-failure").empty();
@@ -199,66 +177,21 @@ $("#weather-btn").on("click", function () {
 });
 
 // ==================================================================================================================
-// Retrieve article info from the New York Times Article Search API
-
-// function newsCall() {
-
-//     // Day of headline (set to same date as crossword & weather)
-//     var headlineYear = sessionStorage.getItem("year");
-//     var headlineMonth = sessionStorage.getItem("month");
-//     var headlineDay = sessionStorage.getItem("day");
-//     // var headlineYear = year;
-//     // var headlineMonth = month;
-//     // var headlineDay = day;
-
-//     // console.log(headlineYear + headlineMonth + headlineDay);
-
-//     var nytURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
-//     nytURL += '?' + $.param({
-//         'api-key': "b9f91d369ff59547cd47b931d8cbc56b:0:74623931",
-//         'fl': "web_url,headline",
-//         'begin_date': (headlineYear + headlineMonth + headlineDay),
-//         'end_date': (headlineYear + headlineMonth + headlineDay)
-//     });
-//     $.ajax({
-//         url: nytURL,
-//         method: "GET",
-//     }).then(function (response) {
-//         // Console log response for testing purposes
-//         // console.log(response);
-//         // $('#headline').text(response.response.docs[0].headline.main);
-//     }).fail(function (err) {
-//         throw err;
-//     });
-// }
-
-// ==================================================================================================================
 //Horoscopes
 
 function horoscopeCall(signType) {
-    // console.log(signType);
     var horoscopeURL = "https://www.horoscopes-and-astrology.com/json";
-    // console.log(signType);
     $.ajax({
         url: horoscopeURL,
         method: "GET"
     }).then(function (response) {
-
-        // Console log response for testing purposes
-        // console.log("Horoscope Obj:");
-        // console.log(signType);
-        // console.log(response);
         var signObj = response.dailyhoroscope[signType];
-        // console.log(signObj);
         $("#horoscope-name").text(signType);
         var horSum = signObj.split("<a");
         $("#horoscope-summary").text(horSum[0]);
 
-        // console.log($(window).innerWidth());
-       //Change Horoscope Image
-      
+        //Change Horoscope Image
         $("#card-img-hor").attr("src", `assets/images/horoscope cards/${signType.toLowerCase()}-card.png`);
-    
     });
 }
 
@@ -296,14 +229,10 @@ function generateCrossword() {
 
         // Crossword Title
         $("#crossword-title").text(`${response.title} - ${response.author}`);
-        // console.log(response.title);
 
-        // console.log("CrossWord Creation:");
         rows = response.size.rows;
         cols = response.size.cols;
-        // console.log(response);
-        // console.log(`rows: ${rows}`);
-        // console.log(`cols: ${cols}`);
+
         //Figure out board dimensions
         var crosswordHolder = $("#crossword");
         //Calculate square sizes
@@ -333,7 +262,6 @@ function generateCrossword() {
                 else {
                     letterHolder.html(`<div class='grid-number'>${response.gridnums[count]}</div><div class='grid-letter'></div>` /*+ "<br>" + count*/);
                 }
-                // letterHolder.text(indexedLetters[count].letterValue);
 
                 newRow.append(letterHolder);
             }
@@ -350,7 +278,6 @@ function generateCrossword() {
         for (var i = 0; i < response.clues.across.length; i++) {
             var newClue = $("<div class='clue'>");
             var index = parseInt(response.clues.across[i]);
-            // console.log(index);
 
             answersAcross.push(response.answers.across[i]);
 
@@ -363,10 +290,8 @@ function generateCrossword() {
         for (var i = 0; i < response.clues.down.length; i++) {
             var newClue = $("<div class='clue'>");
             var index = parseInt(response.clues.down[i]);
-            // console.log(index);
 
             answersDown.push(response.answers.down[i]);
-
 
             newClue.html(`<a class="modal-trigger hint-btn" href="#hint-modal" data-num=${i} data-direction="down">${response.clues.down[i]}</a>`);
             newClue.attr("data-hint", index);
@@ -385,7 +310,6 @@ function generateCrossword() {
 
 function crosswordResize() {
     var width = $("#crossword").innerWidth() - 20;
-    // console.log(`width: ${width}`);
     var newWidth = width / cols;
     $(".row-holder").css("width", `${width}`);
     $(".row-holder").css("height", `${newWidth}`);
@@ -440,19 +364,9 @@ $(document).ready(function () {
             fillCorrectAnswer(ans, hintArray[0], direction);
             $("#hint-modal").modal("close");
 
-            // console.log($(`[data-num=${hintNum}][data-direction="${direction}"]`));
             crossOutHint(hintNum, direction);
-
-            // if (direction === "across") {
-            //     checkOtherHints("down");
-            // }
-            // else {
-            //     checkOtherHints("across");
-            // }
-
         }
         else {
-            // console.log(`Guess: ${guess}: incorrect!`);
             $("#hint-modal").effect("shake");
         }
     })
@@ -460,46 +374,8 @@ $(document).ready(function () {
     $('.modal').modal();
 
     //Crossword Resizing
-    // console.log(`cw width: ${$("#crossword").css("width")}`)
     $(window).resize(crosswordResize);
 });
-
-// function checkOtherHints(direction) {
-//     var numHints;
-//     if (direction === "down") {
-//         numHints = answersDown.length;
-//         for (var i = 0; i < numHints; i++) {
-//             var hintNum = parseInt($(`[data-num=${i}][data-direction="down"]`).text());
-//             var firstLetterHolder = $(`[data-clue-number=${hintNum}]`);
-//             console.log(hintNum);
-//             var coords = firstLetterHolder.attr("id").split("y");
-//             coords[0] = coords[0].substr(1);
-//             console.log(coords);
-//             var ans = answersDown[i];
-//             console.log(ans);
-//             var str = "";
-//             for (var j = 0; j < ans.length; j++) {
-//                 str += $(`#x${parseInt(coords[0])}y${parseInt(coords[1]) + j} .grid-letter`).text();
-//             }
-//             console.log(str);
-//         }
-//     }
-//     else {
-//         numHints = answersAcross.length;
-//         for (var i = 0; i < numHints; i++) {
-//             var hintNum = parseInt($(`[data-num=${i}][data-direction="across"]`).text());
-//             var firstLetterHolder = $(`[data-clue-number=${hintNum}]`);
-//             var coords = firstLetterHolder.attr("id").split("y");
-//             coords[0] = coords[0].substr(1);
-//             var ans = answersAcross[i];
-//             var str = "";
-//             for (var j = 0; j < ans.length; j++) {
-//                 str += $(`#x${parseInt(coords[0]) + j}y${parseInt(coords[1]) + j} .grid-letter`).text();
-//             }
-//             console.log(str);
-//         }
-//     }
-// }
 
 function crossOutHint(hintNum, direction) {
     $(`[data-num=${hintNum}][data-direction="${direction}"]`).css("text-decoration", "line-through");
@@ -508,13 +384,9 @@ function crossOutHint(hintNum, direction) {
 }
 
 function fillCorrectAnswer(ans, gridNum, direction) {
-    // console.log(`Answer: ${ans} \ngridNum: ${gridNum} \nDirection: ${direction} `)
     var firstLetterHolder = $(`[data-clue-number=${gridNum}]`);
     var coords = firstLetterHolder.attr("id").split("y");
     coords[0] = coords[0].substr(1);
-    // console.log(firstLetterHolder.attr("id"));
-    // console.log(coords);
-    // console.log(`x${coords[0]}y${coords[1]}`)
 
     if (direction === "across") {
         for (var i = 0; i < ans.length; i++) {
@@ -549,7 +421,6 @@ function getPartialAns(ans, gridNum, direction) {
             else {
                 partialString += "_ ";
             }
-            // console.log(boxContent);
         }
     }
     else {
@@ -562,7 +433,6 @@ function getPartialAns(ans, gridNum, direction) {
             else {
                 partialString += "_ ";
             }
-            // console.log(boxContent);
         }
     }
     return partialString;
@@ -572,10 +442,7 @@ function isGameOver() {
     for (var i = 0; i < rows; i++) {
         for (var j = 0; j < cols; j++) {
             var currentBox = $(`#x${j}y${i}`);
-            // console.log(currentBox.css("background-color") !== "rgb(0, 0, 0)");
-            // console.log(currentBox.find(".grid-letter").text() === "");
             if (currentBox.css("background-color") !== "rgb(0, 0, 0)" && currentBox.find(".grid-letter").text() === "") {
-                // console.log("empty box!");
                 return false;
             }
         }
@@ -589,15 +456,11 @@ function articleCall() {
     var headlineYear = sessionStorage.getItem("year");
     var headlineMonth = sessionStorage.getItem("month");
     var headlineDay = sessionStorage.getItem("day");
-    // var headlineYear = year;
-    // var headlineMonth = month;
-    // var headlineDay = day;
 
     //Create loading image
     $("#article-holder").empty();
     $("#article-holder").html("<div class='loader'></div>");
 
-    // console.log(headlineYear + headlineMonth + headlineDay);
     var nytURL = "https://cors-anywhere.herokuapp.com/https://api.nytimes.com/svc/search/v2/articlesearch.json";
     nytURL += '?' + $.param({
         'api-key': "38cde8a8164048079300ba0c929f5022",
@@ -610,15 +473,7 @@ function articleCall() {
         method: "GET",
     }).then(function (response) {
         $("#article-holder").empty();
-        // Console log response for testing purposes
         for (let i = 0; i < response.response.docs.length; i++) {
-            // console.log(response);
-            // console.log(response.response.docs[i].headline);
-            // console.log(response.response.docs[i].snippet);
-            // console.log(response.response.docs[i].web_url);
-            // $('#article-section').append("hello");
-
-
             if (response.response.docs[i].news_desk !== "Classified") {
                 var article = $("<div class='card-body'>")
                 var snippet = $("<div>");
@@ -630,51 +485,7 @@ function articleCall() {
             }
 
         }
-
-
     }).fail(function (err) {
         throw err;
     });
 }
-// Day of headline (set to same date as crossword & weather)
-// var headlineYear = year;
-    // var headlineMonth = month;
-    // var headlineDay = day;
-    // console.log(year + month + day);
-    // var newsURL = "https://newsapi.org/v2/top-headlines?country=us&apiKey=ed9a64470959409989b120e1a280e824";
-    // newsURL += '?' + $.param({
-    //     'api-key': "ed9a64470959409989b120e1a280e824",
-    //     // 'fl': "headline",
-    //     'begin_date': (year + month + day),
-    //     'end_date': (year + month + day)
-    // });
-    // $.ajax({
-    //     url: newsURL,
-    //     method: "GET",
-    // }).then(function (response) {
-    //     // Console log response for testing purposes
-    //     console.log(response);
-    // }).fail(function (err) {
-    //     throw err;
-    // });
-// var headlineYear = sessionStorage.getItem("year");
-// var headlineMonth = sessionStorage.getItem("month");
-// var headlineDay = sessionStorage.getItem("day");
-
-// var nytURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
-// nytURL += '?' + $.param({
-//     'api-key': "b9f91d369ff59547cd47b931d8cbc56b:0:74623931",
-//     'fl': "headline,pub_date",
-//     'begin_date': (headlineYear + headlineMonth + headlineDay),
-//     'end_date': (headlineYear + headlineMonth + headlineDay)
-// });
-
-// $.ajax({
-//     url: nytURL,
-//     method: "GET",
-// }).then(function (response) {
-//     // Console log response for testing purposes
-//     console.log(response);
-// }).fail(function (err) {
-//     throw err;
-// });
